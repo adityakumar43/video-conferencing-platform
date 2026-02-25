@@ -22,13 +22,15 @@ const login = async (req, res) => {
             })
         }
 
-        if (bcrypt.compare(password, user.password)){
+        if ( await bcrypt.compare(password, user.password)){
             let token = crypto.randomBytes(20).toString("hex")
             user.token = token
             await user.save()
             return res.status(httpStatus.OK).json({
                 token : token
             })
+        }else{
+            return res.status(httpStatus.UNAUTHORIZED).json({message : "Invalid username or password"})
         }
 
     } catch (error) {
