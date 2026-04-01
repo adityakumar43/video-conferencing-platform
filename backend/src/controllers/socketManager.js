@@ -2,7 +2,7 @@
 import { Server } from "socket.io"
 
 
-let connection = {}
+let connections = {}
 let messages = {}
 let timeOnline = {}
 
@@ -18,6 +18,8 @@ export const connectToSocket = (server) => {
     })
 
     io.on("connection", (socket) => {
+
+        console.log("Something Connected")
 
         socket.on("join-call", (path) => {
 
@@ -42,7 +44,7 @@ export const connectToSocket = (server) => {
         })
 
         socket.on("signal", (toId, message) => {
-            io.to(toId).emit("signal", socket.io, message)
+            io.to(toId).emit("signal", socket.id, message)
         })
 
         socket.on("chat-message", (data, sender) => {
@@ -94,7 +96,7 @@ export const connectToSocket = (server) => {
                         connections[key].splice(index, 1)
 
                         if (connections[key].length === 0) {
-                            delete connecetions[key]
+                            delete connections[key]
                         }
                     }
                 }
